@@ -327,15 +327,43 @@ class Admin extends User {
         addButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 20px; -fx-min-width: 200px; -fx-min-height: 40px;");
         addButton.setOnAction(e -> {
             try {
+                int shelfNo = Integer.parseInt(shelfNoField.getText());
+                
+                // First get section and branch info
                 PreparedStatement st = conn.prepareStatement(
-                    "INSERT INTO book (title, author, publishedYear, condition, availability, shelfNo) VALUES (?, ?, ?, ?, true, ?)"
+                    "SELECT s.shelfNo, sec.sectionNo, b.branchNo " +
+                    "FROM shelf s " +
+                    "JOIN section sec ON s.sectionNo = sec.sectionNo " +
+                    "JOIN branch b ON sec.branchNo = b.branchNo " +
+                    "WHERE s.shelfNo = ?"
+                );
+                st.setInt(1, shelfNo);
+                ResultSet rs = st.executeQuery();
+                
+                String location = null;
+                if (rs.next()) {
+                    location = String.format("Shelf %d, Section %d, Branch %d",
+                        shelfNo,
+                        rs.getInt("sectionNo"),
+                        rs.getInt("branchNo"));
+                } else {
+                    showAlert("Error", "Invalid shelf number");
+                    return;
+                }
+
+                // Insert book with location
+                st = conn.prepareStatement(
+                    "INSERT INTO book (title, author, publishedYear, `condition`, availability, shelfNo, location) " +
+                    "VALUES (?, ?, ?, ?, true, ?, ?)"
                 );
                 st.setString(1, titleField.getText());
                 st.setString(2, authorField.getText());
                 st.setInt(3, Integer.parseInt(yearField.getText()));
                 st.setString(4, conditionField.getText());
-                st.setInt(5, Integer.parseInt(shelfNoField.getText()));
+                st.setInt(5, shelfNo);
+                st.setString(6, location);
                 st.executeUpdate();
+                
                 showAlert("Success", "Book added successfully");
                 showBookManagementScene();
             } catch (SQLException | NumberFormatException ex) {

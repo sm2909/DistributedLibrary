@@ -12,7 +12,7 @@ import javafx.geometry.*;
 public class Main extends Application {
     
     // Database credentials
-    private static final String URL = "jdbc:mysql://10.25.76.66:3306/test";
+    private static final String URL = "jdbc:mysql://10.25.73.139:3306/test";
     private static final String USER = "root";
     private static final String PASSWORD = "cs24b037.5"; 
 

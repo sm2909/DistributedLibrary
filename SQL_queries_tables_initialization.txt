@@ -1,0 +1,79 @@
+CREATE DATABASE your_db_name;
+USE your_db_name;
+CREATE TABLE branch (
+    branchNo int NOT NULL AUTO_INCREMENT,
+    disciplineName varchar(255) DEFAULT NULL,
+    PRIMARY KEY (branchNo)
+ );
+
+ CREATE TABLE section (
+    sectionNo int NOT NULL AUTO_INCREMENT,
+    subDisciplineName varchar(255) DEFAULT NULL,
+    branchNo int DEFAULT NULL,
+    PRIMARY KEY (sectionNo),
+    KEY branchNo (branchNo),
+    CONSTRAINT FOREIGN KEY (branchNo) REFERENCES branch (branchNo) ON DELETE CASCADE
+    );
+
+CREATE TABLE shelf (
+  shelfNo int NOT NULL AUTO_INCREMENT,
+  subjectName varchar(255) DEFAULT NULL,
+  sectionNo int DEFAULT NULL,
+  PRIMARY KEY (shelfNo),
+  KEY sectionNo (sectionNo),
+  CONSTRAINT FOREIGN KEY (sectionNo) REFERENCES section (sectionNo) ON DELETE CASCADE
+); 
+
+CREATE TABLE book (
+  bookID int NOT NULL AUTO_INCREMENT,
+  title varchar(255) DEFAULT NULL,
+  author varchar(255) DEFAULT NULL,
+  publishedYear int DEFAULT NULL,
+  `condition` varchar(255) DEFAULT NULL,
+  availability tinyint(1) DEFAULT NULL,
+  shelfNo int DEFAULT NULL,
+  borrowerID varchar(20) DEFAULT NULL,
+  PRIMARY KEY (bookID),
+  KEY shelfNo (shelfNo),
+  CONSTRAINT FOREIGN KEY (shelfNo) REFERENCES shelf (shelfNo) ON DELETE CASCADE
+);
+
+CREATE TABLE transaction (
+  transactionNo int NOT NULL AUTO_INCREMENT,
+  studentID varchar(255) DEFAULT NULL,
+  borrowDate date DEFAULT NULL,
+  returnDate date DEFAULT NULL,
+  isReturned tinyint(1) DEFAULT NULL,
+  bookID int DEFAULT NULL,
+  borrowerID varchar(20) NOT NULL,
+  PRIMARY KEY (transactionNo),
+  KEY bookID (bookID),
+  CONSTRAINT FOREIGN KEY (bookID) REFERENCES book (bookID) ON DELETE CASCADE
+) ;
+
+CREATE TABLE student (
+  rollNo varchar(255) NOT NULL,
+  name varchar(255) DEFAULT NULL,
+  contactNo bigint DEFAULT NULL,
+  password varchar(255) DEFAULT NULL,
+  PRIMARY KEY (rollNo)
+); 
+
+CREATE TABLE kiosk (
+  kioskID int NOT NULL AUTO_INCREMENT,
+  location varchar(255) NOT NULL,
+  sectionNo int NOT NULL,
+  status varchar(50) DEFAULT NULL,
+  PRIMARY KEY (kioskID),
+  KEY sectionNo (sectionNo),
+  CONSTRAINT FOREIGN KEY (sectionNo) REFERENCES section (sectionNo)
+); 
+
+CREATE TABLE library_timings (
+  id int NOT NULL DEFAULT 1,
+  opening_time varchar(5) DEFAULT NULL,
+  closing_time varchar(5) DEFAULT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT single_row CHECK ((id = 1))
+) 
+-------------------------------------------------------------------------------

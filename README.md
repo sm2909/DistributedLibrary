@@ -1,7 +1,7 @@
 📚 Distributed Library for Knowledge Sharing
 👥 Creators
-Pujari Rudresh Prasad (CS24B034)
 
+Pujari Rudresh Prasad (CS24B034)
 Sarang Mittal (CS24B039)
 
 🌍 Social Impact
@@ -23,6 +23,12 @@ Backend: Java
 Frontend: JavaFX
 
 Database: MySQL
+
+How to run:
+1. Must have connection to out IP address of our database which is hosted on our local machine.
+2. Must have sql drivers installed and should be added to path files in vs code
+3. Must have java fx drivers installed and should be added to path files in vs code
+4. The java version should be 14+ to support java fx
 
 ✨ Features
 The system provides distinct functionalities for both users and administrators to ensure a smooth and robust operation.
